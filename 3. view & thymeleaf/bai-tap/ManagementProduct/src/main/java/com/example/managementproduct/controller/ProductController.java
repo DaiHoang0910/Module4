@@ -27,8 +27,8 @@ public class ProductController {
     public String viewProduct(@PathVariable int id, Model model) {
         Product product = productService.findById(id);
         if (product == null) {
-            model.addAttribute("message", "Product not found!");
-            return "redirect:/products";
+            model.addAttribute("errorMessage", "Product with ID " + id + " not found!");
+            return "error";
         }
         model.addAttribute("product", product);
         return "view";
