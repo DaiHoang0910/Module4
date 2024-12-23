@@ -17,21 +17,32 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public String listProducts(Model model) {
-        List<Product> products = productService.findAll();
+    public String listProducts(@RequestParam(required = false) String name, Model model) {
+        List<Product> products;
+        if (name != null && !name.trim().isEmpty()) {
+            products = productService.searchByName(name);
+        } else {
+            products = productService.findAll();
+        }
         model.addAttribute("products", products);
         return "list";
     }
 
     @GetMapping("/{id}")
-    public String viewProduct(@PathVariable int id, Model model) {
-        Product product = productService.findById(id);
-        if (product == null) {
-            model.addAttribute("errorMessage", "Product with ID " + id + " not found!");
+    public String viewProduct(@PathVariable String id, Model model) {
+        try {
+            int productId = Integer.parseInt(id);
+            Product product = productService.findById(productId);
+            if (product == null) {
+                model.addAttribute("errorMessage", "Product with ID " + id + " not found!");
+                return "error";
+            }
+            model.addAttribute("product", product);
+            return "view";
+        } catch (NumberFormatException e) {
+            model.addAttribute("errorMessage", "Invalid product ID: " + id);
             return "error";
         }
-        model.addAttribute("product", product);
-        return "view";
     }
 
     @GetMapping("/create")
@@ -51,7 +62,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("{id}/delete")
     public String deleteProduct(@PathVariable int id,
                                 Model model) {
         if (productService.findById(id) == null) {
@@ -60,12 +71,5 @@ public class ProductController {
         }
         productService.delete(id);
         return "redirect:/products";
-    }
-
-    @GetMapping("/search")
-    public String searchProduct(@RequestParam String name, Model model) {
-        List<Product> products = productService.searchByName(name);
-        model.addAttribute("products", products);
-        return "list";
     }
 }
