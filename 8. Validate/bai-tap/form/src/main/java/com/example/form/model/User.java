@@ -5,14 +5,14 @@ import jakarta.validation.constraints.*;
 public class User {
     @NotBlank(message = "Họ không được để trống")
     @Size(min = 5, max = 45, message = "Họ phải từ 5 đến 45 ký tự")
-    private String firstname;
+    private String firstName;
 
     @NotBlank(message = "Tên không được để trống")
     @Size(min = 5, max = 45, message = "Tên phải từ 5 đến 45 ký tự")
-    private String lastname;
+    private String lastName;
 
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Số điện thoại không hợp lệ")
-    private String phonenumber;
+    private String phoneNumber;
 
     @Min(value = 18, message = "Tuổi phải từ 18 trở lên")
     private int age;
@@ -21,43 +21,44 @@ public class User {
     @Email(message = "Email không hợp lệ")
     private String email;
 
-    public String getFirstname() {
-        return firstname;
+    public @NotBlank(message = "Họ không được để trống") @Size(min = 5, max = 45, message = "Họ phải từ 5 đến 45 ký tự") String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(@NotBlank(message = "Họ không được để trống") @Size(min = 5, max = 45, message = "Họ phải từ 5 đến 45 ký tự") String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public @NotBlank(message = "Tên không được để trống") @Size(min = 5, max = 45, message = "Tên phải từ 5 đến 45 ký tự") String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(@NotBlank(message = "Tên không được để trống") @Size(min = 5, max = 45, message = "Tên phải từ 5 đến 45 ký tự") String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Số điện thoại không hợp lệ") String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setPhoneNumber(@Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Số điện thoại không hợp lệ") String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
+    @Min(value = 18, message = "Tuổi phải từ 18 trở lên")
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(@Min(value = 18, message = "Tuổi phải từ 18 trở lên") int age) {
         this.age = age;
     }
 
-    public String getEmail() {
+    public @NotBlank(message = "Email không được để trống") @Email(message = "Email không hợp lệ") String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NotBlank(message = "Email không được để trống") @Email(message = "Email không hợp lệ") String email) {
         this.email = email;
     }
 }
