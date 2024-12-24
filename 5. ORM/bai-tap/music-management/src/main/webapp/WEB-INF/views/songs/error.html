@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Error</h1>
+    <p th:text="${errorMessage}">An unexpected error occurred.</p>
+    <a href="/songs" class="btn btn-primary">Back to Song List</a>
+</div>
+</body>
+</html>

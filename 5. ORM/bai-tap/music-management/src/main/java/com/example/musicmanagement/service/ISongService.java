@@ -14,4 +14,6 @@ public interface ISongService {
     void update(Song song);
 
     void remove(int id);
+
+    boolean existsById(int id);
 }

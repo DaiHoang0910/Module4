@@ -34,4 +34,9 @@ public class SongService implements ISongService {
     public void remove(int id) {
         repository.remove(id);
     }
+
+    @Override
+    public boolean existsById(int id) {
+        return findById(id) != null;
+    }
 }

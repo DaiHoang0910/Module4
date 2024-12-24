@@ -32,25 +32,41 @@ public class SongController {
 
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable int id, Model model) {
+        if (!songService.existsById(id)) {
+            model.addAttribute("error", "Song not found.");
+            return "error";
+        }
         model.addAttribute("song", songService.findById(id));
         return "songs/edit";
     }
 
     @PostMapping("/{id}/edit")
-    public String edit(@PathVariable int id, @ModelAttribute Song song) {
+    public String edit(@PathVariable int id, @ModelAttribute Song song, Model model) {
+        if (!songService.existsById(id)) {
+            model.addAttribute("error", "Cannot update song. Song not found.");
+            return "error";
+        }
         song.setId(id);
         songService.update(song);
         return "redirect:/songs";
     }
 
     @GetMapping("/{id}/delete")
-    public String delete(@PathVariable int id) {
+    public String delete(@PathVariable int id, Model model) {
+        if (!songService.existsById(id)) {
+            model.addAttribute("error", "Cannot delete song. Song not found.");
+            return "error";
+        }
         songService.remove(id);
         return "redirect:/songs";
     }
 
     @GetMapping("/{id}/play")
     public String play(@PathVariable int id, Model model) {
+        if (!songService.existsById(id)) {
+            model.addAttribute("error", "Cannot play song. Song not found.");
+            return "error";
+        }
         Song song = songService.findById(id);
         model.addAttribute("song", song);
         return "songs/play";
