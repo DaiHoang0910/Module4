@@ -7,7 +7,7 @@
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/music_management?createDatabaseIfNotExist=true</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">âđđê</property>
+        <property name="hibernate.connection.password">09102003</property>
         <!--        Hiển thị cau lệnh query -->
         <property name="show_sql">true</property>
         <!--        Tự động update nếu entity có thay đổi.-->

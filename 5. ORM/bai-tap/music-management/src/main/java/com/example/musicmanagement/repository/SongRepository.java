@@ -18,7 +18,11 @@ public class SongRepository {
     }
 
     public Song findById(int id) {
-        return BaseRepository.entityManager.find(Song.class, id);
+        Song song = BaseRepository.entityManager.find(Song.class, id);
+        if (song == null) {
+            throw new IllegalArgumentException("Not found the song with ID: " + id);
+        }
+        return song;
     }
 
     public void update(Song song) {
