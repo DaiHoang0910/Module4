@@ -22,4 +22,6 @@ public interface IBlogService {
     Page<Blog> searchByTitle(String title, Pageable pageable);
 
     List<Blog> getBlogsByCategoryId(int categoryId);
+
+    List<Blog> searchByTitle(String title);
 }
