@@ -1,0 +1,223 @@
+Index: case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.casestudy.service;\r\n\r\nimport com.example.casestudy.model.Product;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.PageRequest;\r\nimport org.springframework.data.domain.Pageable;\r\n\r\nimport java.util.Map;\r\n\r\npublic interface IProductService extends IBaseService<Product> {\r\n    Map<String, Object> getMostPurchasedProduct();\r\n\r\n    Map<Integer, Integer> getSalesByMonth();\r\n\r\n    Page<Product> findAll(String name, Integer pageable);\r\n\r\n    Integer remainProductCount(int idProduct);\r\n    Page<Product> findByName(String name, Integer page);\r\n\r\n    Page<Product> getProductsByCategory(Integer id, Pageable pageable);\r\n\r\n    Page<Product> searchProductsByName(String searchName,Pageable pageable);\r\n\r\n    Page<Product> getAllProducts(Pageable pageable);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java b/case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java
+--- a/case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java	(revision 9979837e4b91415f2a64fffb3156f0ef38619bf9)
++++ b/case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java	(date 1736302837937)
+@@ -1,10 +1,12 @@
+ package com.example.casestudy.service;
+ 
++import com.example.casestudy.dto.TopProductDTO;
+ import com.example.casestudy.model.Product;
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.PageRequest;
+ import org.springframework.data.domain.Pageable;
+ 
++import java.util.List;
+ import java.util.Map;
+ 
+ public interface IProductService extends IBaseService<Product> {
+@@ -22,4 +24,6 @@
+     Page<Product> searchProductsByName(String searchName,Pageable pageable);
+ 
+     Page<Product> getAllProducts(Pageable pageable);
++
++    List<TopProductDTO> getTopSellingOrDefaultProducts();
+ }
+Index: case-study/case-study/src/main/java/com/example/casestudy/controller/HomeController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.casestudy.controller;\r\n\r\nimport com.example.casestudy.dto.CategoryDTO;\r\nimport com.example.casestudy.model.Product;\r\nimport com.example.casestudy.service.ICategoryService;\r\nimport com.example.casestudy.service.IProductService;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.stereotype.Controller;\r\nimport org.springframework.ui.Model;\r\nimport org.springframework.web.bind.annotation.GetMapping;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\nimport org.springframework.web.bind.annotation.RequestParam;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Controller\r\n@RequestMapping(\"/home\")\r\npublic class HomeController {\r\n\r\n    @Autowired\r\n    private IProductService productService;\r\n\r\n    @Autowired\r\n    private ICategoryService categoryService;\r\n\r\n    @GetMapping\r\n    public String home(Model model,\r\n                       @RequestParam(defaultValue = \"\") String name,\r\n                       @RequestParam(defaultValue = \"0\") int page) {\r\n\r\n        Page<Product> productPage = productService.findAll(name.trim(), page);\r\n        List<Product> products = productPage.getContent();\r\n        List<TopProductDTO> bestSellers = iproductService.getTopSellingOrDefaultProducts();\r\n\r\n        List<CategoryDTO> categoryDTOs = categoryService.getAllCategoryDTOs();\r\n        model.addAttribute(\"categories\", categoryDTOs);\r\n\r\n        List<List<Product>> productGroups = new ArrayList<>();\r\n        for (int i = 0; i < products.size(); i += 4) {\r\n            int end = Math.min(i + 4, products.size());\r\n            productGroups.add(products.subList(i, end));\r\n        }\r\n        model.addAttribute(\"bestSellers\", bestSellers);\r\n        model.addAttribute(\"productGroups\", productGroups);\r\n        model.addAttribute(\"currentPage\", page);\r\n        model.addAttribute(\"totalPages\", productPage.getTotalPages());\r\n        model.addAttribute(\"name\", name);\r\n\r\n        return \"home\";\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/case-study/case-study/src/main/java/com/example/casestudy/controller/HomeController.java b/case-study/case-study/src/main/java/com/example/casestudy/controller/HomeController.java
+--- a/case-study/case-study/src/main/java/com/example/casestudy/controller/HomeController.java	(revision 9979837e4b91415f2a64fffb3156f0ef38619bf9)
++++ b/case-study/case-study/src/main/java/com/example/casestudy/controller/HomeController.java	(date 1736302776279)
+@@ -1,6 +1,7 @@
+ package com.example.casestudy.controller;
+ 
+ import com.example.casestudy.dto.CategoryDTO;
++import com.example.casestudy.dto.TopProductDTO;
+ import com.example.casestudy.model.Product;
+ import com.example.casestudy.service.ICategoryService;
+ import com.example.casestudy.service.IProductService;
+@@ -32,7 +33,7 @@
+ 
+         Page<Product> productPage = productService.findAll(name.trim(), page);
+         List<Product> products = productPage.getContent();
+-        List<TopProductDTO> bestSellers = iproductService.getTopSellingOrDefaultProducts();
++        List<TopProductDTO> bestSellers = productService.getTopSellingOrDefaultProducts();
+ 
+         List<CategoryDTO> categoryDTOs = categoryService.getAllCategoryDTOs();
+         model.addAttribute("categories", categoryDTOs);
+Index: case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.casestudy.service.implement;\r\n\r\nimport com.example.casestudy.dto.ProductSalesDTO;\r\nimport com.example.casestudy.model.Product;\r\nimport com.example.casestudy.repository.OrderDetailRepository;\r\nimport com.example.casestudy.repository.ProductRepository;\r\nimport com.example.casestudy.service.IProductService;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.PageRequest;\r\nimport org.springframework.data.domain.Pageable;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\n\r\n@Service\r\npublic class ProductService implements IProductService {\r\n    @Autowired\r\n    private ProductRepository productRepository;\r\n    @Autowired\r\n    private OrderDetailRepository orderDetailRepository;\r\n    public Integer soldQuantityProduct(int idProduct){\r\n        return orderDetailRepository.calculateTotalSoldByProductWithCompletedPayments(idProduct);\r\n    }\r\n    @Override\r\n    public Page<Product> findAll(String name, Integer pageable) {\r\n        return productRepository.findAllByCategory_nameCategoryContainingIgnoreCase(name, PageRequest.of(pageable, 8));\r\n    }\r\n\r\n    public Page<Product> getAllProducts(Pageable pageable) {\r\n        return productRepository.findAll(pageable);\r\n    }\r\n\r\n    @Override\r\n    public Integer remainProductCount(int idProduct) {\r\n        return productRepository.findRemainProductQuantity(idProduct);\r\n    }\r\n\r\n    @Override\r\n    public Page<Product> findByName(String name, Integer page) {\r\n        return productRepository.findByNameContainingIgnoreCase(name, PageRequest.of(page, 5));\r\n    }\r\n\r\n    @Override\r\n    public Page<Product> getProductsByCategory(Integer id, Pageable pageable) {\r\n        return productRepository.findByCategoryId(id, pageable);\r\n    }\r\n\r\n    @Override\r\n    public Page<Product> searchProductsByName(String searchName, Pageable pageable) {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public void addNew(Product product) {\r\n        productRepository.save(product);\r\n    }\r\n\r\n    @Override\r\n    public boolean update(int id, Product product) {\r\n        productRepository.save(product);\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public List<Product> getAll() {\r\n        return productRepository.findAll();\r\n    }\r\n\r\n    @Override\r\n    public Product getById(int id) {\r\n        return productRepository.findById(id).get();\r\n    }\r\n\r\n    @Override\r\n    public boolean deleteById(int id) {\r\n        productRepository.deleteById(id);\r\n        return true;\r\n    }\r\n    @Override\r\n    public Product findById(int id) {\r\n        return productRepository.findById(id).orElse(null);\r\n    }\r\n    public Map<String, Object> getMostPurchasedProduct() {\r\n        List<Object[]> results = productRepository.findMostPurchasedProducts();\r\n        if (!results.isEmpty()) {\r\n            Object[] topProduct = results.get(0);\r\n            Map<String, Object> data = new HashMap<>();\r\n            data.put(\"productName\", topProduct[0]);\r\n            data.put(\"quantitySold\", topProduct[1]);\r\n            return data;\r\n        }\r\n        Map<String, Object> defaultData = new HashMap<>();\r\n        defaultData.put(\"productName\", \"N/A\");\r\n        defaultData.put(\"quantitySold\", 0);\r\n        return defaultData;\r\n    }\r\n    public Map<Integer, Integer> getSalesByMonth() {\r\n        List<Object[]> results = productRepository.findSalesByMonth();\r\n        Map<Integer, Integer> salesData = new HashMap<>();\r\n        for (Object[] result : results) {\r\n            salesData.put((Integer) result[0], ((Number) result[1]).intValue());\r\n        }\r\n        return salesData;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductService.java b/case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductService.java
+--- a/case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductService.java	(revision 9979837e4b91415f2a64fffb3156f0ef38619bf9)
++++ b/case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductService.java	(date 1736302871289)
+@@ -1,6 +1,7 @@
+ package com.example.casestudy.service.implement;
+ 
+ import com.example.casestudy.dto.ProductSalesDTO;
++import com.example.casestudy.dto.TopProductDTO;
+ import com.example.casestudy.model.Product;
+ import com.example.casestudy.repository.OrderDetailRepository;
+ import com.example.casestudy.repository.ProductRepository;
+@@ -14,6 +15,7 @@
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
++import java.util.stream.Collectors;
+ 
+ @Service
+ public class ProductService implements IProductService {
+@@ -105,4 +107,25 @@
+         }
+         return salesData;
+     }
++
++    @Override
++    public List<TopProductDTO> getTopSellingOrDefaultProducts() {
++        List<TopProductDTO> topSellingProducts = productRepository
++                .findTopSellingProducts(PageRequest.of(0, 4))
++                .getContent();
++        if (topSellingProducts.isEmpty()) {
++            List<Product> defaultProducts = productRepository
++                    .findAll(PageRequest.of(0, 4))
++                    .getContent();
++
++            return defaultProducts.stream().map(product -> new TopProductDTO(
++                    product,
++                    product.getCategory(),
++                    0L,
++                    product.getImage()
++            )).collect(Collectors.toList());
++        }
++
++        return topSellingProducts;
++    }
+ }
+Index: case-study/case-study/src/main/java/com/example/casestudy/repository/ProductRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.casestudy.repository;\r\n\r\nimport com.example.casestudy.model.Product;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.Pageable;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.data.jpa.repository.Query;\r\nimport org.springframework.data.repository.query.Param;\r\nimport org.springframework.stereotype.Repository;\r\n\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\npublic interface ProductRepository extends JpaRepository<Product, Integer> {\r\n    @Query(\"SELECT p.name, SUM(o.quantity) FROM details_order o JOIN o.product p GROUP BY p.id, p.name ORDER BY SUM(o.quantity) DESC\")\r\n    List<Object[]> findMostPurchasedProducts();\r\n\r\n    @Query(\"SELECT MONTH(o.timeOrder) AS month, SUM(d.quantity) AS totalSold \" +\r\n            \"FROM details_order d JOIN d.order o \" +\r\n            \"GROUP BY MONTH(o.timeOrder) \" +\r\n            \"ORDER BY MONTH(o.timeOrder)\")\r\n    List<Object[]> findSalesByMonth();\r\n    @Query(\"SELECT p FROM products p WHERE LOWER(p.category.nameCategory) LIKE LOWER(CONCAT('%', :nameCategory, '%'))\")\r\n    Page<Product> findAllByCategory_nameCategoryContainingIgnoreCase(@Param(\"nameCategory\") String nameCategory, Pageable pageable);\r\n    List<Product> findByCategory_Id(Integer category);\r\n    @Query(\"SELECT p.totalProductQuantity - COALESCE(SUM(od.quantity), 0) \" +\r\n            \"FROM products p \" +\r\n            \"LEFT JOIN details_order od ON p.id = od.product.id \" +\r\n            \"LEFT JOIN payments  pay ON od.order.id = pay.order.id \" +\r\n            \"WHERE p.id = :productId AND pay.status = com.example.casestudy.model.Payment.PaymentStatus.COMPLETED \" +\r\n            \"GROUP BY p.id\")\r\n\r\n\r\n    Integer findRemainProductQuantity(@Param(\"productId\") Integer productId);\r\n\r\n    Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);\r\n\r\n    Optional<Product> findById(Integer id);\r\n\r\n    Page<Product> findByCategoryId(Integer categoryId, Pageable pageable);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/case-study/case-study/src/main/java/com/example/casestudy/repository/ProductRepository.java b/case-study/case-study/src/main/java/com/example/casestudy/repository/ProductRepository.java
+--- a/case-study/case-study/src/main/java/com/example/casestudy/repository/ProductRepository.java	(revision 9979837e4b91415f2a64fffb3156f0ef38619bf9)
++++ b/case-study/case-study/src/main/java/com/example/casestudy/repository/ProductRepository.java	(date 1736302977069)
+@@ -1,7 +1,9 @@
+ package com.example.casestudy.repository;
+ 
++import com.example.casestudy.dto.TopProductDTO;
+ import com.example.casestudy.model.Product;
+ import org.springframework.data.domain.Page;
++import org.springframework.data.domain.PageRequest;
+ import org.springframework.data.domain.Pageable;
+ import org.springframework.data.jpa.repository.JpaRepository;
+ import org.springframework.data.jpa.repository.Query;
+@@ -38,4 +40,14 @@
+     Optional<Product> findById(Integer id);
+ 
+     Page<Product> findByCategoryId(Integer categoryId, Pageable pageable);
++
++    //Linh
++    @Query("SELECT new com.example.casestudy.dto.TopProductDTO(p, c, SUM(od.quantity), p.image) " +
++            "FROM products p " +
++            "JOIN p.category c " +
++            "JOIN details_order od ON od.product.id = p.id " +
++            "GROUP BY p.id, p.name, p.image, c.id, c.nameCategory " +
++            "ORDER BY SUM(od.quantity) DESC")
++
++    Page<TopProductDTO> findTopSellingProducts(PageRequest pageable);
+ }
+Index: case-study/case-study/src/main/java/com/example/casestudy/repository/IProductRepository.java
+===================================================================
+diff --git a/case-study/case-study/src/main/java/com/example/casestudy/repository/IProductRepository.java b/case-study/case-study/src/main/java/com/example/casestudy/repository/IProductRepository.java
+deleted file mode 100644
+--- a/case-study/case-study/src/main/java/com/example/casestudy/repository/IProductRepository.java	(revision 9979837e4b91415f2a64fffb3156f0ef38619bf9)
++++ /dev/null	(revision 9979837e4b91415f2a64fffb3156f0ef38619bf9)
+@@ -1,24 +0,0 @@
+-package com.example.casestudy.repository;
+-
+-import com.example.casestudy.dto.TopProductDTO;
+-import com.example.casestudy.model.Product;
+-import org.springframework.data.domain.Page;
+-import org.springframework.data.domain.PageRequest;
+-import org.springframework.data.domain.Pageable;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-import org.springframework.data.jpa.repository.Query;
+-import org.springframework.stereotype.Repository;
+-
+-import java.util.List;
+-
+-@Repository
+-public interface IProductRepository extends JpaRepository<Product, Integer> {
+-    @Query("SELECT new com.example.casestudy.dto.TopProductDTO(p, c, SUM(od.quantity), p.image) " +
+-            "FROM products p " +
+-            "JOIN p.category c " +
+-            "JOIN details_order od ON od.product.id = p.id " +
+-            "GROUP BY p.id, p.name, p.image, c.id, c.nameCategory " +
+-            "ORDER BY SUM(od.quantity) DESC")
+-
+-    Page<TopProductDTO> findTopSellingProducts(PageRequest pageable);
+-}
+\ No newline at end of file
+Index: case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductServicee.java
+===================================================================
+diff --git a/case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductServicee.java b/case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductServicee.java
+deleted file mode 100644
+--- a/case-study/case-study/src/main/java/com/example/casestudy/service/implement/ProductServicee.java	(revision 9979837e4b91415f2a64fffb3156f0ef38619bf9)
++++ /dev/null	(revision 9979837e4b91415f2a64fffb3156f0ef38619bf9)
+@@ -1,40 +0,0 @@
+-package com.example.casestudy.service.implement;
+-
+-import com.example.casestudy.dto.TopProductDTO;
+-import com.example.casestudy.model.Product;
+-import com.example.casestudy.repository.IProductRepository;
+-import com.example.casestudy.service.IProductServicee;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.data.domain.PageRequest;
+-import org.springframework.stereotype.Service;
+-
+-import java.util.List;
+-import java.util.stream.Collectors;
+-
+-@Service
+-public class ProductServicee implements IProductServicee {
+-
+-    @Autowired
+-    private IProductRepository iproductRepository;
+-
+-    @Override
+-    public List<TopProductDTO> getTopSellingOrDefaultProducts() {
+-        List<TopProductDTO> topSellingProducts = iproductRepository
+-                .findTopSellingProducts(PageRequest.of(0, 4))
+-                .getContent();
+-        if (topSellingProducts.isEmpty()) {
+-            List<Product> defaultProducts = iproductRepository
+-                    .findAll(PageRequest.of(0, 4))
+-                    .getContent();
+-
+-            return defaultProducts.stream().map(product -> new TopProductDTO(
+-                    product,
+-                    product.getCategory(),
+-                    0L,
+-                    product.getImage()
+-            )).collect(Collectors.toList());
+-        }
+-
+-        return topSellingProducts;
+-    }
+-}

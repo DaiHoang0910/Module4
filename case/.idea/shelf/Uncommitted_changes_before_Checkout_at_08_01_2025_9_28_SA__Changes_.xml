@@ -1,0 +1,17 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_08_01_2025_9_28_SA_[Changes]" date="1736303446559" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_08_01_2025_9_28_SA_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 08/01/2025 9:28 SA [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="case-study/case-study/src/main/resources/static/slider_2.jpg" />
+    <option name="AFTER_PATH" value="case-study/case-study/src/main/resources/static/img/banner/slider_2.jpg" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_08_01_2025_9_28_SA_[Changes]/slider_2.jpg" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="case-study/case-study/src/main/resources/static/slider_1.jpg" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="case-study/case-study/src/main/resources/static/slider_3.jpg" />
+    <option name="AFTER_PATH" value="case-study/case-study/src/main/resources/static/img/banner/slider_3.jpg" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_08_01_2025_9_28_SA_[Changes]/slider_3.jpg" />
+  </binary>
+</changelist>

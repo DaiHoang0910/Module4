@@ -1,0 +1,66 @@
+Index: case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.casestudy.service;\r\n\r\nimport com.example.casestudy.model.Product;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.Pageable;\r\n\r\nimport java.util.Map;\r\n\r\npublic interface IProductService extends IBaseService<Product> {\r\n    Map<String, Object> getMostPurchasedProduct();\r\n\r\n    Map<Integer, Integer> getSalesByMonth();\r\n\r\n    Page<Product> findAll(String name, Integer pageable);\r\n\r\n    Integer remainProductCount(int idProduct);\r\n    Page<Product> findByName(String name, Integer page);\r\n\r\n    Page<Product> getProductsByCategory(Integer id, Pageable pageable);\r\n\r\n    Page<Product> searchProductsByName(String searchName,Pageable pageable);\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java b/case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java
+--- a/case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java	(revision 1d48a1a7254179e5a052f61da8fee99f61631c62)
++++ b/case-study/case-study/src/main/java/com/example/casestudy/service/IProductService.java	(date 1736300549358)
+@@ -20,4 +20,6 @@
+ 
+     Page<Product> searchProductsByName(String searchName,Pageable pageable);
+ 
++    public Page<Product> getAllProducts(Pageable pageable);
++
+ }
+Index: case-study/case-study/src/main/java/com/example/casestudy/controller/UserController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.casestudy.controller;\r\n\r\nimport com.example.casestudy.service.*;\r\nimport com.example.casestudy.service.implement.AccountService;\r\nimport com.example.casestudy.service.implement.EmailService;\r\nimport com.example.casestudy.service.implement.PaymentService;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.security.access.prepost.PreAuthorize;\r\nimport org.springframework.stereotype.Controller;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\n\r\n@PreAuthorize(\"hasAuthority('ROLE_USER')\")\r\n@Controller\r\n@RequestMapping(\"/users\")\r\npublic class UserController {\r\n    @Autowired\r\n    private ICustomerService customerService;\r\n    @Autowired\r\n    private IOrderService orderService;\r\n    @Autowired\r\n    private PaymentService paymentService;\r\n    @Autowired\r\n    private IProductService productService;\r\n    @Autowired\r\n    private AccountService accountService;\r\n    @Autowired\r\n    private ICategoryService categoryService;\r\n    @Autowired\r\n    private EmailService emailService;\r\n    @Autowired\r\n    private IOrderDetailsService orderDetailsService;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/case-study/case-study/src/main/java/com/example/casestudy/controller/UserController.java b/case-study/case-study/src/main/java/com/example/casestudy/controller/UserController.java
+--- a/case-study/case-study/src/main/java/com/example/casestudy/controller/UserController.java	(revision 1d48a1a7254179e5a052f61da8fee99f61631c62)
++++ b/case-study/case-study/src/main/java/com/example/casestudy/controller/UserController.java	(date 1736300506273)
+@@ -3,7 +3,7 @@
+ import com.example.casestudy.service.*;
+ import com.example.casestudy.service.implement.AccountService;
+ import com.example.casestudy.service.implement.EmailService;
+-import com.example.casestudy.service.implement.PaymentService;
++//import com.example.casestudy.service.implement.PaymentService;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.security.access.prepost.PreAuthorize;
+ import org.springframework.stereotype.Controller;
+@@ -17,8 +17,8 @@
+     private ICustomerService customerService;
+     @Autowired
+     private IOrderService orderService;
+-    @Autowired
+-    private PaymentService paymentService;
++//    @Autowired
++//    private PaymentService paymentService;
+     @Autowired
+     private IProductService productService;
+     @Autowired
+Index: case-study/case-study/src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.application.name=case-study\r\nspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver\r\nspring.datasource.url=jdbc:mysql://localhost:3306/dana_finest?createDatabaseIfNotExist=true\r\nspring.datasource.username=root\r\nspring.datasource.password=Huongh2001@qt\r\nspring.jpa.hibernate.ddl-auto=update\r\nspring.jpa.show-sql=true\r\nserver.port=8080\r\n\r\nspring.mail.host=smtp.gmail.com\r\nspring.mail.port=587\r\nspring.mail.username=finestdana@gmail.com\r\nspring.mail.password=gtcsoyongjrcnunl\r\nspring.mail.protocol=smtp\r\nspring.mail.properties.mail.smtp.auth=true\r\nspring.mail.properties.mail.smtp.starttls.enable=true\r\n\r\nspring.thymeleaf.prefix=classpath:/templates/\r\nspring.thymeleaf.suffix=.html\r\n\r\npaypal.client.id= AVYkW1aVTdi_mwkha_zDeQvfpP1wHKoQiKrb8g-CW-OQ6E3p2vfjAEQbI42SX7jMaAl8qKc53IuFjbVp;\r\npaypal.client.secret=EKCKy-LgIiOuQe2fXlCMfdvM4ZDRRAFi14qUgmv3_F-cTc-KktBsR5hq5nWfx1x7Ox7evK0SBosYDOFb\r\npaypal.mode=sandbox
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/case-study/case-study/src/main/resources/application.properties b/case-study/case-study/src/main/resources/application.properties
+--- a/case-study/case-study/src/main/resources/application.properties	(revision 1d48a1a7254179e5a052f61da8fee99f61631c62)
++++ b/case-study/case-study/src/main/resources/application.properties	(date 1736300606059)
+@@ -2,7 +2,7 @@
+ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+ spring.datasource.url=jdbc:mysql://localhost:3306/dana_finest?createDatabaseIfNotExist=true
+ spring.datasource.username=root
+-spring.datasource.password=Huongh2001@qt
++spring.datasource.password=09102003
+ spring.jpa.hibernate.ddl-auto=update
+ spring.jpa.show-sql=true
+ server.port=8080
